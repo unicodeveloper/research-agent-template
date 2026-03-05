@@ -24,12 +24,29 @@ Click **Commit changes** when done.
 
 Go to **Settings** > **Secrets and variables** > **Actions** > **New repository secret**.
 
-Add these two secrets:
+Add these three secrets (one at a time):
 
 | Name | Value |
 |------|-------|
 | `ANTHROPIC_API_KEY` | Your Anthropic API key from [console.anthropic.com](https://console.anthropic.com/) |
 | `VALYU_API_KEY` | Your Valyu API key from [valyu.network](https://valyu.network/) |
+| `GWS_CREDENTIALS` | Your Google Workspace credentials (see step below) |
+
+**To get your Google Workspace credentials:**
+
+Open your terminal and run:
+
+```bash
+gws auth login
+```
+
+A browser window will open — sign in with your Google account. Then run:
+
+```bash
+gws auth export --unmasked
+```
+
+Copy the entire output and paste it as the value for the `GWS_CREDENTIALS` secret. This is a one-time step — GitHub will use these credentials to access Google Drive and Gmail on your behalf going forward.
 
 ### 4. Test it
 

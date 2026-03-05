@@ -24,13 +24,24 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
+      - name: Install Claude Code and GWS CLI
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          npm install -g @googleworkspace/cli
+
+      - name: Set up Google Workspace auth
+        env:
+          GWS_CREDENTIALS: ${{ secrets.GWS_CREDENTIALS }}
+        run: |
+          mkdir -p ~/.config/gws
+          echo "$GWS_CREDENTIALS" > ~/.config/gws/credentials.json
+          chmod 600 ~/.config/gws/credentials.json
 
       - name: Run research agent
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           VALYU_API_KEY: ${{ secrets.VALYU_API_KEY }}
+          GOOGLE_WORKSPACE_CLI_CREDENTIALS_FILE: ~/.config/gws/credentials.json
         run: |
           TODAY=$(date +"%B %d, %Y")
           {
