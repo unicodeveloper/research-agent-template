@@ -1,0 +1,40 @@
+name: Daily Research Agent
+
+on:
+  schedule:
+    # Runs every weekday at 12:00 PM UTC (7 AM ET / 4 AM PT)
+    # To change the time, edit the hour (12) below
+    # To run every day including weekends, change '1-5' to '*'
+    - cron: '0 12 * * 1-5'
+
+  # Lets you run it manually anytime from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out config
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run research agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          VALYU_API_KEY: ${{ secrets.VALYU_API_KEY }}
+        run: |
+          TODAY=$(date +"%B %d, %Y")
+          {
+            echo "Today is $TODAY."
+            echo ""
+            cat config.md
+          } | claude --print
