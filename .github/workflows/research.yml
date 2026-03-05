@@ -37,4 +37,4 @@ jobs:
             echo "Today is $TODAY."
             echo ""
             cat config.md
-          } | claude --print
+          } | claude --dangerously-skip-permissions
